@@ -1,9 +1,10 @@
 // Node modules
 import { useState } from "react";
+import ResultAPI from "./types/ResultAPI";
 
 export default function App() {
   // Local state
-  const [messages, setMessages] = useState<string[]>([]);
+  const [result, setResult] = useState<ResultAPI[]>([]);
   const [status, setStatus] = useState("On Stand by 🧊");
 
   const links = ["www.abc.com", "www.cnn.com", "www.nbc.net"];
@@ -14,28 +15,37 @@ export default function App() {
     const eventSource = new EventSource(`http://localhost:8000?${query}`);
 
     setStatus("Starting connection 📡");
-    setMessages([]);
+    setResult([]);
 
     eventSource.onmessage = function (event) {
-      updateMessage(event.data);
+      updateEvent(event);
     };
 
     eventSource.onerror = function () {
-      endMessage();
-      eventSource.close();
+      endEvent(eventSource);
     };
   }
 
-  function updateMessage(newMessage: string) {
-    setMessages((previousState) => [...previousState, newMessage]);
+  function updateEvent(event: MessageEvent) {
+    const newResult: ResultAPI = JSON.parse(event.data);
+    console.log("Frontend data received", newResult);
+
+    setResult((previousResults) => [...previousResults, newResult]);
   }
 
-  function endMessage() {
+  function endEvent(eventSource: EventSource) {
+    eventSource.close();
     setStatus("Finished connection 🏁");
   }
 
   // Components
-  const Items = messages.map((item, index) => <li key={index}>{item}</li>);
+  const Items = result.map((item, index) => (
+    <li key={index}>
+      <a href={item.link} target="_blank">
+        {item.date}
+      </a>
+    </li>
+  ));
 
   return (
     <div id="app">
