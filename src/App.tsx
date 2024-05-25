@@ -7,17 +7,17 @@ export default function App() {
   const [result, setResult] = useState<ResultAPI[]>([]);
   const [status, setStatus] = useState("On Stand by 🧊");
 
-  const links = ["www.abc.com", "www.cnn.com", "www.nbc.net"];
-
   // Methods
   function onStart() {
+    const links = ["www.abc.com", "www.cnn.com", "www.nbc.net"];
     const query = links.map((l) => `link=${encodeURIComponent(l)}`).join("&");
-    const eventSource = new EventSource(`http://localhost:8000?${query}`);
+    const eventSource = new EventSource(`http://localhost:8000/event?${query}`);
 
     setStatus("Starting connection 📡");
     setResult([]);
 
     eventSource.onmessage = function (event) {
+      console.log("Frontend new message", event);
       updateEvent(event);
     };
 
@@ -34,6 +34,7 @@ export default function App() {
   }
 
   function endEvent(eventSource: EventSource) {
+    console.log(result);
     eventSource.close();
     setStatus("Finished connection 🏁");
   }

@@ -10,8 +10,8 @@ const port = 8000;
 
 app.listen(port, () => console.log(`Backend V3 on port ${port}`));
 
-app.get("/", async (request, response) => {
-  console.log("📡 Connected");
+app.get("/event", async (request, response) => {
+  console.log("📡 Server Connected v2");
 
   // Properties
   const links = request.query.link;
@@ -23,10 +23,12 @@ app.get("/", async (request, response) => {
   response.setHeader("Connection", "keep-alive");
 
   try {
-    for (const link in links) {
+    for (const link of links) {
       const date = new Date().toLocaleString();
+      const data = "hi";
+      console.log(data);
 
-      response.write(`data: { date: ${date}, link: ${link}`);
+      response.write(`hi\n\n`);
       await sleep(1000);
     }
   } catch (error) {
