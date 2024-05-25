@@ -14,7 +14,8 @@ app.get("/", async (request, response) => {
   console.log("📡 Connected");
 
   // Properties
-  let maxMessages = 3;
+  const links = request.query.link;
+  console.log("Server recived links", links);
 
   response.setHeader("Content-Type", "text/event-stream");
   response.setHeader("Cache-Control", "no-cache");
@@ -22,10 +23,10 @@ app.get("/", async (request, response) => {
   response.setHeader("Connection", "keep-alive");
 
   try {
-    for (let index = 0; index < maxMessages; index++) {
+    for (const link in links) {
       const date = new Date().toLocaleString();
 
-      response.write(`data: ${date}\n\n`);
+      response.write(`data: { date: ${date}, link: ${link}`);
       await sleep(1000);
     }
   } catch (error) {

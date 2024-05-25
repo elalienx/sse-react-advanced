@@ -6,16 +6,15 @@ export default function App() {
   const [messages, setMessages] = useState<string[]>([]);
   const [status, setStatus] = useState("On Stand by 🧊");
 
-  // Properties
-  let eventSource: EventSource;
+  const links = ["www.abc.com", "www.cnn.com", "www.nbc.net"];
 
   // Methods
   function onStart() {
+    const query = links.map((l) => `link=${encodeURIComponent(l)}`).join("&");
+    const eventSource = new EventSource(`http://localhost:8000?${query}`);
+
     setStatus("Starting connection 📡");
     setMessages([]);
-
-    // Properties
-    eventSource = new EventSource("http://localhost:8000");
 
     eventSource.onmessage = function (event) {
       updateMessage(event.data);
