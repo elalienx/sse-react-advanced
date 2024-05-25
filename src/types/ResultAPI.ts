@@ -1,4 +1,4 @@
 export default interface ResultAPI {
-  date: string;
+  time: string;
   link: string;
 }
