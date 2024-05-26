@@ -14,7 +14,7 @@ export default function App() {
       "http://www.cnn.com",
       "http://www.nbc.com",
     ];
-    const query = links.map((l) => `link=${encodeURIComponent(l)}`).join("&");
+    const query = links.map((l) => `links=${encodeURIComponent(l)}`).join("&");
     const eventSource = new EventSource(`http://localhost:8000/event?${query}`);
 
     setStatus("Starting connection 📡");

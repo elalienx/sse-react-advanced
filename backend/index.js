@@ -14,7 +14,7 @@ app.get("/event", async (request, response) => {
   console.log("📡 Server Connected");
 
   // Properties
-  const links = request.query.link;
+  const links = request.query.links;
   console.log("Server recived links", links);
 
   response.setHeader("Content-Type", "text/event-stream");
