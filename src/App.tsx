@@ -9,24 +9,16 @@ export default function App() {
 
   // Methods
   function onStart() {
-    const links = [
-      "http://www.abc.com",
-      "http://www.cnn.com",
-      "http://www.nbc.com",
-    ];
-    const query = links.map((l) => `links=${encodeURIComponent(l)}`).join("&");
+    const links = ["http://www.abc.com", "http://www.cnn.com"];
+    const query = links.map((l) => `links=${l}`).join("&");
     const eventSource = new EventSource(`http://localhost:8000/event?${query}`);
 
+    console.log(query);
     setStatus("Starting connection 📡");
     setResult([]);
 
-    eventSource.onmessage = function (event) {
-      updateEvent(event);
-    };
-
-    eventSource.onerror = function () {
-      endEvent(eventSource);
-    };
+    eventSource.onmessage = (event) => updateEvent(event);
+    eventSource.onerror = () => endEvent(eventSource);
   }
 
   function updateEvent(event: MessageEvent) {
